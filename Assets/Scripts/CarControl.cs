@@ -41,6 +41,8 @@ public class CarControl : MonoBehaviour
 
     public WheelFrictionCurve wfc;
 
+    public bool stopped = false;
+
     private void Update()
     {
         if (automatic)
@@ -52,7 +54,14 @@ public class CarControl : MonoBehaviour
             ManualGears();
         }
         HandleGearMode();
-        HandleBurnOut();
+
+        if (!stopped)
+        {
+            if (RR != null && RL != null)
+            {
+                HandleBurnOut();
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -60,16 +69,29 @@ public class CarControl : MonoBehaviour
         rb.centerOfMass = _centerOfMass;
         speed = rb.velocity.magnitude * 2.237f;
 
-        if (automatic)
+        if (!stopped)
         {
-            AccelerateAuto();
+            GetInput();
+            if (RR != null && RL != null && FR != null && FL != null)
+            {
+                if (automatic)
+                {
+                    AccelerateAuto();
+                }
+                else
+                {
+                    AccelerateManual();
+                }
+                Steer();
+            }
         }
         else
         {
-            AccelerateManual();
+            RR.brakeTorque = brakeForce;
+            RL.brakeTorque = brakeForce;
+            FR.brakeTorque = brakeForce;
+            FL.brakeTorque = brakeForce;
         }
-        GetInput();
-        Steer();
         UpdateWheelPoses();
     }
 

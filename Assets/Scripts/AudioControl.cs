@@ -35,6 +35,16 @@ public class AudioControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (cc.stopped)
+        {
+            if (cc.speed < 0.5f)
+                engine.volume = 0f;
+        }
+        else
+        {
+            engine.volume = 0.5f;
+        }
+
         if (engine.pitch >= 0.5 && engine.pitch <= 1.035)
         {
             if (cc.gear == 0)

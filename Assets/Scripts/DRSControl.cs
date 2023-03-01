@@ -58,13 +58,16 @@ public class DRSControl : MonoBehaviour
             }
         }
 
-        if (status)
+        if (wingFlap != null)
         {
-            wingFlap.transform.localRotation = Quaternion.Slerp(wingFlap.transform.localRotation, Quaternion.Euler(wingRot[1]), 15f * Time.deltaTime);
-        }
-        else
-        {
-            wingFlap.transform.localRotation = Quaternion.Slerp(wingFlap.transform.localRotation, Quaternion.Euler(wingRot[0]), 15f * Time.deltaTime);
+            if (status)
+            {
+                wingFlap.transform.localRotation = Quaternion.Slerp(wingFlap.transform.localRotation, Quaternion.Euler(wingRot[1]), 15f * Time.deltaTime);
+            }
+            else
+            {
+                wingFlap.transform.localRotation = Quaternion.Slerp(wingFlap.transform.localRotation, Quaternion.Euler(wingRot[0]), 15f * Time.deltaTime);
+            }
         }
 
         if (bulb != null)

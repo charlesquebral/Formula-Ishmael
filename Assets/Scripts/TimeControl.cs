@@ -4,15 +4,45 @@ using UnityEngine;
 
 public class TimeControl : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int lapsAvailable = 5;
+    public int lapsUsed = 0;
+
+    public bool valid = true;
+
+    public List<string> lapNum = new List<string>();
+    public List<string> times = new List<string>();
+    public List<string> validated = new List<string>();
+
+    private void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (valid)
+        {
+            if (lapsUsed > lapsAvailable)
+            {
+                valid = false;
+
+                lapsUsed = lapsAvailable;
+            }
+        }
+        else
+        {
+            CarControl cc = FindObjectOfType<CarControl>();
+            cc.stopped = true;
+        }
+    }
+
+    public void AddTimeString(float t)
+    {
+        float msec = (int)((t - (int)t) * 100);
+        float sec = (int)(t % 60);
+        float min = (int)(t / 60 % 60);
+
+        string time = string.Format("{0:00}:{1:00}:{2:00}", min, sec, msec);
+        times.Add(time);
     }
 }

@@ -13,15 +13,18 @@ public class DashControl : MonoBehaviour
 
     public TextMeshPro speed;
     public TextMeshPro gear;
-    public TextMeshPro gearStatus;
+    public TextMeshPro lapCounter;
 
-    public Gradient gradient;
-    public SpriteRenderer rl, rr, fl, fr;
+    public TimeControl tc;
+
+    public bool lastLapGood = true;
 
     // Start is called before the first frame update
     void Start()
     {
         bestTime = 9999999999999999999;
+
+        lapCounter.text = "LAP 0";
     }
 
     // Update is called once per frame
@@ -38,25 +41,25 @@ public class DashControl : MonoBehaviour
             gear.text = "R";
         }
 
-        if (control.automatic)
+        lapCounter.text = "LAP " + tc.lapsUsed.ToString();
+
+        if (tc.valid)
         {
-            gearStatus.text = "AUTO";
+            if (enable)
+            {
+                if (GetComponent<TLimitControl>().goodTime)
+                {
+                    timeText.text = string.Format("{0:00}:{1:00}:{2:00}", min, sec, msec);
+                }
+                else
+                {
+                    timeText.text = string.Format("{0:00}:{1:00}:{2:00}", min, sec, msec);
+                }
+            }
         }
         else
         {
-            gearStatus.text = "MANUAL";
-        }
-
-        if (enable)
-        {
-            if (GetComponent<TLimitControl>().goodTime)
-            {
-                timeText.text = string.Format("{0:00}:{1:00}:{2:00}", min, sec, msec);
-            }
-            else
-            {
-                timeText.text = string.Format("{0:00}:{1:00}:{2:00}" + "*", min, sec, msec);
-            }
+            timeText.text = "00:00:00";
         }
 
         REVLED();
@@ -78,9 +81,25 @@ public class DashControl : MonoBehaviour
             }
             else
             {
-                if (GetComponent<TLimitControl>().goodTime)
+                if (tc.valid)
                 {
-                    CompareTime(time);
+                    float newTime = time - 0.02f;
+                    if (GetComponent<TLimitControl>().goodTime)
+                    {
+                        CompareTime(newTime);
+                    }
+
+                    tc.AddTimeString(newTime);
+                    tc.lapNum.Add(tc.lapsUsed.ToString());
+                    if (GetComponent<TLimitControl>().goodTime)
+                    {
+                        tc.validated.Add("Y");
+                    }
+                    else
+                    {
+                        tc.validated.Add("N");
+                    }
+                    tc.lapsUsed++;
                 }
 
                 StartCoroutine(Disable());
@@ -99,7 +118,7 @@ public class DashControl : MonoBehaviour
     float sec;
     float min;
 
-    float bestTime;
+    public float bestTime;
 
     public IEnumerator StopWatch()
     {
@@ -123,6 +142,7 @@ public class DashControl : MonoBehaviour
         msec = 0;
         sec = 0;
         min = 0;
+        lastLapGood = GetComponent<TLimitControl>().goodTime;
         yield return new WaitForSeconds(4f);
         enable = true;
     }
@@ -131,10 +151,20 @@ public class DashControl : MonoBehaviour
     {
         if (t < bestTime)
         {
-            float newMsec = msec - 2f;
-            bestTimeText.text = string.Format("{0:00}:{1:00}:{2:00}", min, sec, newMsec);
+            float newT = t;
+            bestTime = newT;
 
-            bestTime = t;
+            float msec_best = (int)((newT - (int)newT) * 100);
+            float sec_best = (int)(newT % 60);
+            float min_best = (int)(newT / 60 % 60);
+            string bestTimeString = string.Format("{0:00}:{1:00}:{2:00}", min_best, sec_best, msec_best);
+            bestTimeText.text = bestTimeString;
+
+            HUDControl hc = FindObjectOfType<HUDControl>();
+            if (hc != null)
+            {
+                StartCoroutine(hc.ChangeToPurple());
+            }
         }
     }
 
@@ -226,11 +256,6 @@ public class DashControl : MonoBehaviour
                 child.GetComponent<Light>().enabled = false;
             }
         }
-    }
-
-    void TIREDISPLAY(SpriteRenderer rend, WheelFrictionCurve wfc, float init)
-    {
-        rend.color = gradient.Evaluate(wfc.extremumSlip / 2);
     }
 }
 

@@ -37,6 +37,14 @@ public class SteerAnim : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!cc.stopped)
+        {
+            Steer();
+        }
+    }
+
+    void Steer()
+    {
         if (im.horizontal > 0)
         {
             stem.transform.localRotation = Quaternion.Slerp(stem.transform.localRotation, Quaternion.Euler(myAngles[1]), lerpTime * Time.deltaTime);
