@@ -15,6 +15,7 @@ TagManager:
   - tracklimits
   - rumblestrips
   - terrain
+  - Reset
   layers:
   - Default
   - TransparentFX

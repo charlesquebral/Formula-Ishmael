@@ -113,7 +113,7 @@ public class DashControl : MonoBehaviour
 
     public bool initialized = false;
     public bool stopWatchOn = false;
-    float time;
+    public float time;
     float msec;
     float sec;
     float min;
@@ -147,6 +147,7 @@ public class DashControl : MonoBehaviour
         enable = true;
     }
 
+    public GhostRecorder gr;
     public void CompareTime(float t)
     {
         if (t < bestTime)

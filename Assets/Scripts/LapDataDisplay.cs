@@ -10,14 +10,20 @@ public class LapDataDisplay : MonoBehaviour
     public TextMeshProUGUI lap;
     public TextMeshProUGUI time;
     public TextMeshProUGUI valid;
+    public TextMeshProUGUI avgSpeed;
+    public TextMeshProUGUI dist;
+    public TextMeshProUGUI timeT;
+    public TextMeshProUGUI timeB;
+    public TextMeshProUGUI timeC;
 
     [Header("Etc")]
     public TimeControl tc;
     public HUDControl hc;
+    public DataGather dg;
     public int childIndex;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         childIndex = transform.GetSiblingIndex();
     }
@@ -30,6 +36,11 @@ public class LapDataDisplay : MonoBehaviour
             lap.text = tc.lapNum[childIndex];
             time.text = tc.times[childIndex];
             valid.text = tc.validated[childIndex];
+            avgSpeed.text = dg.avgSpeed[childIndex];
+            dist.text = dg.distTraveled[childIndex];
+            timeT.text = dg.timeThrot[childIndex];
+            timeB.text = dg.timeBrake[childIndex];
+            timeC.text = dg.timeCoast[childIndex];
         }
     }
 }

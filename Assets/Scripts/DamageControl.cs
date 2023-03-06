@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class DamageControl : MonoBehaviour
 {
@@ -19,9 +21,18 @@ public class DamageControl : MonoBehaviour
 
     Vector3 rrOrig, rlOrig, frOrig, flOrig;
 
+    public GameObject[] resetters;
+    public Transform closestResetter;
+
     // Start is called before the first frame update
     void Start()
     {
+        resetters = GameObject.FindGameObjectsWithTag("Reset");
+        for (int i = 0; i < resetters.Length; i++)
+        {
+            resetters[i].transform.GetChild(0).gameObject.SetActive(false);
+        }
+
         fwOrig = fwFake.transform.localPosition;
         rwOrig = rwFake.transform.localPosition;
         lnOrig = lnFake.transform.localPosition;
@@ -44,7 +55,7 @@ public class DamageControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        closestResetter = GetClosestResetter();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -152,6 +163,14 @@ public class DamageControl : MonoBehaviour
         }
     }
 
+    public IEnumerator ResetCar()
+    {
+        yield return new WaitForSeconds(5);
+        ResetDamaged(fw, fwReal, fwFake, fwOrig);
+        ResetDamaged(rw, rwReal, rwFake, rwOrig);
+        ResetDamaged(ln, lnReal, lnFake, lnOrig);
+    }
+
     void ResetDamaged(Collider realColl, GameObject real, GameObject fake, Vector3 origPos)
     {
         if (!realColl.enabled)
@@ -165,10 +184,30 @@ public class DamageControl : MonoBehaviour
         if (fake.transform.parent == null)
         {
             fake.transform.SetParent(damageParent);
+            fake.transform.localPosition = origPos;
         }
         if (fake.activeSelf)
         {
             fake.SetActive(false);
         }
+    }
+
+    public Transform GetClosestResetter()
+    {
+
+        float closestDistance = Mathf.Infinity;
+        Transform trans = null;
+        foreach (GameObject go in resetters)
+        {
+            float currentDistance;
+            currentDistance = Vector3.Distance(transform.position, go.transform.position);
+
+            if (currentDistance <= closestDistance)
+            {
+                closestDistance = currentDistance;
+                trans = go.transform;
+            }
+        }
+        return trans;
     }
 }
