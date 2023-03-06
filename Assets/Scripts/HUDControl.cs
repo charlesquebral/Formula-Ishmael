@@ -10,10 +10,11 @@ public class HUDControl : MonoBehaviour
     public GameObject gameFrame;
     public TimeControl tc;
     public DashControl dc;
+    public DeltaTimeControl dtc;
 
     public Color originalCol, bestCol, invalidCol;
     public Image currFrame, bestFrame;
-    public TextMeshProUGUI lap, best, time;
+    public TextMeshProUGUI lap, best, time, delta;
 
     [Header("PostGameplay")]
     public GameObject postGameFrame;
@@ -48,6 +49,7 @@ public class HUDControl : MonoBehaviour
         lap.text = "LAP " + tc.lapsUsed.ToString() + " / " + tc.lapsAvailable.ToString();
         best.text = "BEST: " + dc.bestTimeText.text;
         time.text = "CURRENT: " + dc.timeText.text;
+        delta.text = dtc.deltaText;
 
         if (dc.enable)
         {

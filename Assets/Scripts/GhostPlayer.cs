@@ -24,11 +24,6 @@ public class GhostPlayer : MonoBehaviour
             GetIndex();
             SetTransform();
         }
-
-        if (index1 >= ghost.timeStamp.Count - 1)
-        {
-            timerVal = 0;
-        }
     }
 
     void GetIndex()
