@@ -32,7 +32,10 @@ public class TimeControl : MonoBehaviour
         else
         {
             CarControl cc = FindObjectOfType<CarControl>();
-            cc.stopped = true;
+            if (cc != null)
+            {
+                cc.stopped = true;
+            }
         }
     }
 

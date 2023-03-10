@@ -12,8 +12,8 @@ public class HUDControl : MonoBehaviour
     public DashControl dc;
     public DeltaTimeControl dtc;
 
-    public Color originalCol, bestCol, invalidCol;
-    public Image currFrame, bestFrame;
+    public Color originalCol, bestCol, invalidCol, goodCol;
+    public Image currFrame, bestFrame, deltaFrame;
     public TextMeshProUGUI lap, best, time, delta;
 
     [Header("PostGameplay")]
@@ -22,7 +22,7 @@ public class HUDControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        delta.text = "+/-0.00";
     }
 
     // Update is called once per frame
@@ -49,7 +49,23 @@ public class HUDControl : MonoBehaviour
         lap.text = "LAP " + tc.lapsUsed.ToString() + " / " + tc.lapsAvailable.ToString();
         best.text = "BEST: " + dc.bestTimeText.text;
         time.text = "CURRENT: " + dc.timeText.text;
-        delta.text = dtc.deltaText;
+
+        if (delta.text.Substring(0, 3) == "+/-")
+        {
+            deltaFrame.color = originalCol;
+        }
+        else if (delta.text.Substring(0, 1) == "+")
+        {
+            deltaFrame.color = invalidCol;
+        }
+        else if (delta.text.Substring(0, 1) == "-")
+        {
+            deltaFrame.color = goodCol;
+        }
+        else
+        {
+            deltaFrame.color = originalCol;
+        }
 
         if (dc.enable)
         {

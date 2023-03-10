@@ -8,6 +8,11 @@ public class GhostPlayer : MonoBehaviour
     public float timerVal;
     public int index1;
     public int index2;
+
+    public GameObject gameCar, postGameCar, actualCar, postCamera;
+
+    public TimeControl tc;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -23,6 +28,31 @@ public class GhostPlayer : MonoBehaviour
         {
             GetIndex();
             SetTransform();
+            if (tc.valid)
+            {
+                if (!gameCar.activeSelf)
+                {
+                    gameCar.SetActive(true);
+                    postGameCar.SetActive(false);
+                }
+            }
+            else
+            {
+                if (gameCar.activeSelf)
+                {
+                    gameCar.SetActive(false);
+                    postGameCar.SetActive(true);
+                    actualCar.SetActive(false);
+                    postCamera.SetActive(true);
+                }
+
+                if (index1 >= ghost.timeStamp.Count - 1 || index2 >= ghost.timeStamp.Count - 1)
+                {
+                    timerVal = 0;
+                    index1 = 0;
+                    index2 = 0;
+                }
+            }
         }
     }
 

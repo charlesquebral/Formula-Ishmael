@@ -6,6 +6,10 @@ public class SpectatorCam : MonoBehaviour
 {
     public Camera cam;
 
+    public TimeControl tc;
+
+    public GameObject gameTarget, postGameTarget;
+
     public Transform target;
 
     float lastDist;
@@ -21,6 +25,21 @@ public class SpectatorCam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (tc.valid)
+        {
+            if (target != gameTarget)
+            {
+                target = gameTarget.transform;
+            }
+        }
+        else
+        {
+            if (target != postGameTarget)
+            {
+                target = postGameTarget.transform;
+            }
+        }
+
         transform.LookAt(target.position);
 
         float currDist = Vector3.Distance(transform.position, target.position);
