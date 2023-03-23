@@ -27,12 +27,12 @@ public class DeltaTimeControl : MonoBehaviour
 
     private void Start()
     {
-        beams = FindObjectsOfType<DeltaHolder>();
+        //beams = FindObjectsOfType<DeltaHolder>();
 
-        closestBeam = GetClosestBeam();
+        //closestBeam = GetClosestBeam();
     }
 
-    private void Update()
+    /*private void Update()
     {
         closestBeam = GetClosestBeam();
 
@@ -97,7 +97,7 @@ public class DeltaTimeControl : MonoBehaviour
             }
         }
         return trans;
-    }
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {
@@ -109,7 +109,7 @@ public class DeltaTimeControl : MonoBehaviour
             {
                 if (dc.lastLapGood)
                 {
-                    StartCoroutine(CompareTime());
+                    //StartCoroutine(CompareTime());
 
                     if ((dc.time - 0.02f) < dc.bestTime)
                     {
@@ -131,7 +131,7 @@ public class DeltaTimeControl : MonoBehaviour
             ready = false;
         }
 
-        /*if (other.name == "delt")
+        if (other.name == "beam")
         {
             other.gameObject.GetComponent<DeltaHolder>().currTimeHere = dc.time;
 
@@ -166,6 +166,6 @@ public class DeltaTimeControl : MonoBehaviour
                     }
                 }
             }
-        }*/
+        }
     }
 }

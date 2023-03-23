@@ -22,7 +22,7 @@ public class DeltaHolder : MonoBehaviour
 
     public string deltaText;
 
-    /*private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.name == "fw")
         {
@@ -62,5 +62,5 @@ public class DeltaHolder : MonoBehaviour
                 }
             }
         }
-    }*/
+    }
 }
